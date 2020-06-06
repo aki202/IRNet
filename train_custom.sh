@@ -3,6 +3,9 @@
 
 #!/bin/bash
 
+# ./train_custom.sh 0 {save_name} {load_model}
+# ./train_custom.sh 0 base_add_train_spider2 ./saved_model/base.model
+
 devices=$1
 save_name=$2
 load_model=$3
