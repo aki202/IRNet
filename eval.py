@@ -16,6 +16,7 @@ from src import utils
 from src.models.model import IRNet
 from src.rule import semQL
 
+import pdb
 
 def evaluate(args):
     """
@@ -24,6 +25,12 @@ def evaluate(args):
     """
 
     grammar = semQL.Grammar()
+    """
+    sql_data list[dict] 7831行, data/train.jsonの内容
+    table_data dict 全DBのスキーマ、要素が1DBに対応し、複数テーブルを持つ
+    val_sql_data list[dict] 1032行
+    val_table_data dict
+    """
     sql_data, table_data, val_sql_data,\
     val_table_data= utils.load_dataset(args.dataset, use_small=args.toy)
 
@@ -35,6 +42,7 @@ def evaluate(args):
     pretrained_model = torch.load(args.load_model,
                                      map_location=lambda storage, loc: storage)
     import copy
+
     pretrained_modeled = copy.deepcopy(pretrained_model)
     for k in pretrained_model.keys():
         if k not in model.state_dict().keys():
