@@ -17,6 +17,8 @@ from utils import symbol_filter, re_lemma, fully_part_header, group_header, part
 from utils import AGG, wordnet_lemmatizer
 from utils import load_dataSets
 
+import pdb
+
 def process_datas(datas, args):
     """
 
@@ -32,6 +34,12 @@ def process_datas(datas, args):
 
     # copy of the origin question_toks
     for d in datas:
+        try:
+            if 'origin_question_toks' not in d:
+                d['origin_question_toks'] = d['question_toks']
+        except Exception as e:
+            pdb.set_trace() 
+
         if 'origin_question_toks' not in d:
             d['origin_question_toks'] = d['question_toks']
 
