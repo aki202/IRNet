@@ -16,14 +16,19 @@ import copy
 import numpy as np
 import os
 import torch
+from pprint import pprint as pp
 from nltk.stem import WordNetLemmatizer
+
+import pdb
 
 from src.dataset import Example
 from src.rule import lf
 from src.rule.semQL import Sup, Sel, Order, Root, Filter, A, N, C, T, Root1
+from src.spider.evaluation import Evaluator
 
 wordnet_lemmatizer = WordNetLemmatizer()
 
+evaluator = Evaluator()
 
 def load_word_emb(file_name, use_small=False):
     print ('Loading word embedding from %s'%file_name)
@@ -264,6 +269,21 @@ def epoch_acc(model, batch_size, sql_data, table_data, beam_size=3):
     perm = list(range(len(sql_data)))
     st = 0
 
+    counts = {
+        'all': 0,
+        'easy': 0,
+        'medium': 0,
+        'hard': 0,
+        'extra': 0,
+    }
+    corrects = {
+        'all': 0,
+        'easy': 0,
+        'medium': 0,
+        'hard': 0,
+        'extra': 0,
+    }
+
     json_datas = []
     sketch_correct, rule_label_correct, total = 0, 0, 0
     while st < len(sql_data):
@@ -293,15 +313,28 @@ def epoch_acc(model, batch_size, sql_data, table_data, beam_size=3):
             truth_sketch = " ".join([str(x) for x in example.sketch])
             truth_rule_label = " ".join([str(x) for x in example.tgt_actions])
 
+            hardness = evaluator.eval_hardness(simple_json['sql'])
+            counts['all'] += 1
+            counts[hardness] += 1
+
             if truth_sketch == simple_json['sketch_result']:
                 sketch_correct += 1
             if truth_rule_label == simple_json['model_result']:
                 rule_label_correct += 1
+                corrects['all'] += 1
+                corrects[hardness] += 1
             total += 1
 
             json_datas.append(simple_json)
+
         st = ed
-    return json_datas, float(sketch_correct)/float(total), float(rule_label_correct)/float(total)
+    return [
+        json_datas,
+        float(sketch_correct)/float(total),
+        float(rule_label_correct)/float(total),
+        counts,
+        corrects
+    ]
 
 def eval_acc(preds, sqls):
     sketch_correct, best_correct = 0, 0
