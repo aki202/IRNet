@@ -334,3 +334,4 @@ raw_data/
 saved_model/
 
 predict_lf.json
+.DS_Store
