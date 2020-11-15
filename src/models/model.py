@@ -22,9 +22,8 @@ from src.models.basic_model import BasicModel
 from src.models.pointer_net import PointerNet
 from src.rule import semQL as define_rule
 
-
 class IRNet(BasicModel):
-    
+
     def __init__(self, args, grammar):
         super(IRNet, self).__init__()
         self.args = args
@@ -101,7 +100,7 @@ class IRNet(BasicModel):
         nn.init.xavier_normal_(self.type_embed.weight.data)
         nn.init.xavier_normal_(self.N_embed.weight.data)
         print('Use Column Pointer: ', True if self.use_column_pointer else False)
-        
+
     def forward(self, examples):
         args = self.args
         # now should implement the examples
@@ -297,7 +296,7 @@ class IRNet(BasicModel):
 
             apply_rule_prob = F.softmax(self.production_readout(att_t), dim=-1)
             table_appear_mask_val = torch.from_numpy(table_appear_mask)
-            if self.cuda:
+            if self.args.cuda:
                 table_appear_mask_val = table_appear_mask_val.cuda()
 
             if self.use_column_pointer:

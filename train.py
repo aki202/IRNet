@@ -25,20 +25,15 @@ from src import utils
 from src.models.model import IRNet
 from src.rule import semQL
 
-
 def train(args):
     """
     :param args:
     :return:
     """
-
     grammar = semQL.Grammar()
-    sql_data, table_data, val_sql_data,\
-    val_table_data= utils.load_dataset(args.dataset, use_small=args.toy)
+    sql_data, table_data, val_sql_data, val_table_data = utils.load_dataset(args.dataset, use_small=args.toy)
 
     model = IRNet(args, grammar)
-
-
     if args.cuda: model.cuda()
 
     # now get the optimizer
@@ -81,8 +76,9 @@ def train(args):
                                    loss_epoch_threshold=args.loss_epoch_threshold,
                                    sketch_loss_coefficient=args.sketch_loss_coefficient)
                 epoch_end = time.time()
-                json_datas, sketch_acc, acc = utils.epoch_acc(model, args.batch_size, val_sql_data, val_table_data,
-                                             beam_size=args.beam_size)
+                json_datas, sketch_acc, acc, counts, corrects = utils.epoch_acc(
+                    model, args.batch_size, val_sql_data, val_table_data,
+                    beam_size=args.beam_size)
                 # acc = utils.eval_acc(json_datas, val_sql_data)
 
                 if acc > best_dev_acc:
@@ -103,8 +99,9 @@ def train(args):
         print(tb)
     else:
         utils.save_checkpoint(model, os.path.join(model_save_path, 'end_model.model'))
-        json_datas, sketch_acc, acc = utils.epoch_acc(model, args.batch_size, val_sql_data, val_table_data,
-                                     beam_size=args.beam_size)
+        json_datas, sketch_acc, acc, counts, corrects = utils.epoch_acc(
+            model, args.batch_size, val_sql_data, val_table_data,
+            beam_size=args.beam_size)
         # acc = utils.eval_acc(json_datas, val_sql_data)
 
         print("Sketch Acc: %f, Acc: %f, Beam Acc: %f" % (sketch_acc, acc, acc,))
