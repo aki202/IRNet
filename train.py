@@ -81,8 +81,7 @@ def train(args):
                                    loss_epoch_threshold=args.loss_epoch_threshold,
                                    sketch_loss_coefficient=args.sketch_loss_coefficient)
                 epoch_end = time.time()
-                json_datas, sketch_acc, acc = utils.epoch_acc(model, args.batch_size, val_sql_data, val_table_data,
-                                             beam_size=args.beam_size)
+                json_datas, sketch_acc, acc = utils.epoch_acc(model, args.batch_size, val_sql_data, val_table_data, beam_size=args.beam_size)
                 # acc = utils.eval_acc(json_datas, val_sql_data)
 
                 if acc > best_dev_acc:

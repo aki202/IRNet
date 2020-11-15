@@ -332,6 +332,7 @@ ASALocalRun/
 data/
 raw_data/
 saved_model/
+train_log/
 
 predict_lf.json
 .DS_Store
