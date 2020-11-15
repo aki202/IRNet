@@ -21,4 +21,4 @@ CUDA_VISIBLE_DEVICES=$devices python -u train.py --dataset ./data \
 --hidden_size 300 \
 --lr_scheduler \
 --lr_scheduler_gammar 0.5 \
---att_vec_size 300 > ${save_name}".log"
+--att_vec_size 300 > train_log/${save_name}".log"
