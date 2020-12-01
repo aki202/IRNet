@@ -328,3 +328,16 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
+data/
+raw_data/
+saved_model/
+train_log/
+
+predict_lf.json
+.DS_Store
+eval2.sh
+gold.txt
+nohup.out
+
+
