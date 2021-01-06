@@ -13,7 +13,7 @@ load_model=$3
 CUDA_VISIBLE_DEVICES=$devices python -u train.py --dataset ./data \
 --glove_embed_path ./data/glove.42B.300d.txt \
 --cuda \
---epoch 50 \
+--epoch 30 \
 --loss_epoch_threshold 50 \
 --sketch_loss_coefficie 1.0 \
 --beam_size 1 \
@@ -26,4 +26,4 @@ CUDA_VISIBLE_DEVICES=$devices python -u train.py --dataset ./data \
 --hidden_size 300 \
 --lr_scheduler \
 --lr_scheduler_gammar 0.5 \
---att_vec_size 300 > ${save_name}".log"
+--att_vec_size 300 > train_log/${save_name}".log"
